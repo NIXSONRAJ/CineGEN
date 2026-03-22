@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineGEN | The Gateway</title>
+    
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="film-grain"></div>
+
+    <header class="global-header">
+        <div class="header-branding">
+            <div class="header-title">CINEGEN</div>
+            <div class="header-tagline">By Ash Creations Company</div>
+        </div>
+        
+        <div class="header-nav-group">
+            <button class="nav-icon-btn" onclick="window.history.back()" title="Go Back"><i class="ph ph-arrow-left"></i></button>
+            <a href="/" class="nav-icon-btn" title="Home"><i class="ph ph-house"></i></a>
+        </div>
+
+        <div class="menu-toggle" title="Settings & Profile" onclick="toggleProfileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <div class="profile-dropdown" id="profileMenu">
+            <a href="#" class="dropdown-item" onclick="openModal('modal-profile')"><i class="ph ph-user"></i> Profile Info</a>
+            <a href="#" class="dropdown-item" onclick="openModal('modal-appearance')"><i class="ph ph-palette"></i> Appearance</a>
+            <a href="#" class="dropdown-item" onclick="openModal('modal-about')"><i class="ph ph-info"></i> About CineGEN</a>
+            <div style="height: 1px; background: rgba(255,255,255,0.1); margin: 5px 0;"></div>
+            <a href="#" class="dropdown-item" style="color: #ff4444;"><i class="ph ph-sign-out"></i> Sign Out</a>
+        </div>
+    </header>
+
+    <main class="gateway-wrapper">
+        <div class="gateway-grid">
+            
+            <a href="/workspace.html" class="cell-box logic fade-in" style="animation-delay: 0.1s;">
+                <i class="ph ph-chart-line-up" style="font-size: 5rem; margin-bottom: 20px; display: block; color: var(--text-main); transition: 0.4s;"></i>
+                <h2>WORKSPACE</h2>
+                <p>Enter the data-driven command center. Upload datasets, execute MySQL and Python scripts, and query the TMDB intelligence API with the Cine Genie Chatbot.</p>
+            </a>
+
+            <a href="/script-studio.html" class="cell-box creative fade-in" style="animation-delay: 0.3s;">
+                <i class="ph ph-pen-nib" style="font-size: 5rem; margin-bottom: 20px; display: block; color: var(--text-main); transition: 0.4s;"></i>
+                <h2>SCRIPT STUDIO</h2>
+                <p>Enter the creative suite. Break down story logic with the AI Script Analyst, organize your Production Work queue, and craft industry-standard screenplays.</p>
+            </a>
+
+        </div>
+    </main>
+
+    <div class="modal-overlay" id="modal-profile">
+        <div class="modal-box">
+            <button class="close-modal" onclick="closeModal('modal-profile')"><i class="ph ph-x"></i></button>
+            <h2 class="modal-title">Ash Creations Company</h2>
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="{{ url_for('static', filename='ash.png') }}" alt="Ash Creations" style="width: 150px; filter: invert(1); mix-blend-mode: screen;">
+            </div>
+            <p style="line-height: 1.8;"><strong>Ash Creations Company</strong> is a premier software and design architectural firm. Founded on the principle that logic and creativity are not mutually exclusive, we build enterprise-grade applications that feel like cinematic experiences.</p>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Lead Architect: Director Devil<br>Version: CineGEN OS 1.0.0</p>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-appearance">
+        <div class="modal-box">
+            <button class="close-modal" onclick="closeModal('modal-appearance')"><i class="ph ph-x"></i></button>
+            <h2 class="modal-title">System Appearance</h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">Select your preferred visual matrix. The system will remember your choice.</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <button class="cine-btn primary" onclick="changeTheme('theme-default')">🌌 Dark AMOLED</button>
+                <button class="cine-btn" style="border-color: #00ff41; color: #00ff41;" onclick="changeTheme('theme-matrix')">📟 The Matrix</button>
+                <button class="cine-btn" style="background: #f8fafc; color: #0f172a;" onclick="changeTheme('theme-light')">☀️ Light Studio</button>
+                <button class="cine-btn" style="border-color: white; color: white;" onclick="changeTheme('theme-contrast')">🔳 High Contrast</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-about">
+        <div class="modal-box">
+            <button class="close-modal" onclick="closeModal('modal-about')"><i class="ph ph-x"></i></button>
+            <h2 class="modal-title">About CineGEN Engine</h2>
+            <p style="line-height: 1.8;"><strong>CineGEN</strong> is a dual-engine production suite.</p>
+            <ul style="line-height: 1.8; color: var(--text-muted);">
+                <li><strong>The Workspace</strong> integrates deeply with TMDB, Wikipedia, and Apify to map cinematic lore. It features an onboard Pandas-driven Data Manager and a simulated Python/MySQL execution terminal.</li>
+                <li><strong>The Script Studio</strong> harnesses an OpenRouter AI integration configured specifically as a Hollywood Script Doctor, complete with a modular scene queueing system.</li>
+                <li><strong>Voice Intelligence:</strong> Includes a highly tuned text-to-speech matrix running an Angelic/Husky neural profile.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

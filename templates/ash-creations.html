@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ash Creations | The Genesis</title>
+    
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Bespoke Cinematic Styles */
+        body {
+            margin: 0; padding: 0;
+            background-color: #030305;
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* The Scroll-Reveal Engine */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Navigation */
+        .back-nav {
+            position: fixed; top: 30px; left: 40px;
+            color: #64748b; text-decoration: none; font-size: 1.2rem;
+            letter-spacing: 2px; text-transform: uppercase;
+            z-index: 100; transition: 0.3s; display: flex; align-items: center; gap: 10px;
+        }
+        .back-nav:hover { color: #00e5ff; transform: translateX(-5px); }
+
+        /* Story Sections */
+        .story-section {
+            min-height: 100vh;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: 0 20px; text-align: center;
+            position: relative;
+        }
+
+        .cinematic-text {
+            font-family: 'Cinzel', serif;
+            font-size: 3.5rem;
+            max-width: 1000px;
+            line-height: 1.3;
+            background: linear-gradient(90deg, #ffffff, #8ba1b5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .paragraph-text {
+            font-size: 1.15rem;
+            max-width: 750px;
+            line-height: 1.9;
+            color: #94a3b8;
+            font-weight: 300;
+        }
+
+        /* Image Treatments (Refined & Toned Down) */
+        .artifact-image {
+            width: 250px;
+            margin-bottom: 50px;
+            filter: invert(1) opacity(0.8); 
+            border-radius: 4px;
+        }
+
+        .ashiverse-banner {
+            width: 100%;
+            max-width: 700px;
+            margin: 60px 0 40px 0;
+            border-radius: 8px;
+            /* Stripped the bright red, replaced with a deep, dark cinematic shadow */
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 20px rgba(255,255,255,0.02); 
+            transition: 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+            filter: contrast(1.1) brightness(0.9); /* Makes the red look deeper, less neon */
+        }
+        .ashiverse-banner:hover {
+            transform: scale(1.02);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 1), 0 0 30px rgba(255,255,255,0.05);
+        }
+
+        .signature {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            color: #b200ff;
+            margin-top: 60px;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+        }
+
+        /* Ambient Background Glows (Subtle) */
+        .glow-orb {
+            position: absolute; border-radius: 50%; filter: blur(120px); z-index: -1;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="javascript:history.back()" class="back-nav"><i class="ph ph-arrow-left"></i> OS Gateway</a>
+
+    <div class="story-section">
+        <div class="glow-orb" style="width: 500px; height: 500px; background: rgba(0, 229, 255, 0.03); top: 10%;"></div>
+        <h1 class="cinematic-text reveal">Before the Architecture.<br>There was a Vision.</h1>
+        <p class="paragraph-text reveal" style="transition-delay: 0.3s; letter-spacing: 2px; text-transform: uppercase; font-size: 0.9rem;">Initiate Archive Retrieval</p>
+        <i class="ph ph-caret-down reveal" style="font-size: 2rem; color: #64748b; margin-top: 50px; animation: bounce 2s infinite; transition-delay: 0.6s;"></i>
+    </div>
+
+    <div class="story-section">
+        <img src="{{ url_for('static', filename='has.jpg') }}" alt="The Original Blueprint" class="artifact-image reveal">
+        <h2 class="cinematic-text reveal" style="font-size: 2.5rem;">Two Architects. One Empire.</h2>
+        <p class="paragraph-text reveal">
+            It began not as a company, but as a blueprint drafted by two young visionaries—MOSHITHA GENIPINI and NICKSON VALENTINO—at the ages of eighteen and twenty. We weren't just conceptualizing software. We were mapping out a master creation firm. A technological ecosystem designed to build <em>everything</em>.
+        </p>
+    </div>
+
+    <div class="story-section">
+        <div class="glow-orb" style="width: 600px; height: 600px; background: rgba(178, 0, 255, 0.03); bottom: 20%;"></div>
+        <h2 class="cinematic-text reveal" style="font-style: italic; color: #ffffff; font-size: 2.8rem;">
+            "There is no creation without the Creator.<br>And the Creator is the ASH."
+        </h2>
+        <p class="paragraph-text reveal">
+            Those early planning sessions laid the absolute foundation for what we are today. We realized that true innovation requires a universal standard. We swore that every field, every industry, and every leap in technology would bear the indelible footprint of Ash.
+        </p>
+    </div>
+
+    <div class="story-section">
+        <div class="glow-orb" style="width: 800px; height: 800px; background: rgba(0, 0, 0, 0.5); top: 30%;"></div>
+        
+        <img src="{{ url_for('static', filename='ashiverse.png') }}" alt="The Ashiverse Expansion" class="ashiverse-banner reveal">
+        
+        <h2 class="cinematic-text reveal" style="font-size: 2.5rem;">The Universal Matrix</h2>
+        <p class="paragraph-text reveal">
+            Today, that vision is the Ashiverse. It is a sprawling, interconnected network of logic, data, and art. But at the core of this expanding empire is the 'us' that started it all—a collective of dreamers, engineers, and architects. This is the Ash Family.
+        </p>
+        <div class="signature reveal">— Mr. ASH</div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.15 });
+
+            reveals.forEach(reveal => {
+                observer.observe(reveal);
+            });
+        });
+    </script>
+</body>
+</html>

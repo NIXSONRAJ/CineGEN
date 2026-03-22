@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineGEN | Script Studio</title>
+    
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="film-grain"></div>
+
+    <header class="global-header">
+        <div class="header-branding">
+            <div class="header-title">CINEGEN</div>
+            <div class="header-tagline">By Ash Creations Company</div>
+        </div>
+        
+        <div class="header-nav-group">
+            <button class="nav-icon-btn" onclick="window.history.back()" title="Go Back"><i class="ph ph-arrow-left"></i></button>
+            <a href="/" class="nav-icon-btn" title="Home"><i class="ph ph-house"></i></a>
+        </div>
+
+        <div class="menu-toggle" title="Settings & Profile" onclick="toggleProfileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <div class="profile-dropdown" id="profileMenu">
+            <a href="#" class="dropdown-item" onclick="openModal('modal-profile')"><i class="ph ph-user"></i> Profile Info</a>
+            <a href="#" class="dropdown-item" onclick="openModal('modal-appearance')"><i class="ph ph-palette"></i> Appearance</a>
+            <a href="#" class="dropdown-item" onclick="openModal('modal-about')"><i class="ph ph-info"></i> About CineGEN</a>
+            <div style="height: 1px; background: rgba(255,255,255,0.1); margin: 5px 0;"></div>
+            <a href="#" class="dropdown-item" style="color: #ff4444;"><i class="ph ph-sign-out"></i> Sign Out</a>
+        </div>
+    </header>
+
+    <div class="app-container">
+        
+        <nav class="sidebar">
+            <div class="sidebar-item active" id="nav-analyst" onclick="switchCell('analyst')" style="color: var(--accent-violet);">
+                <i class="ph ph-robot"></i> Script Analyst Bot
+            </div>
+            
+            <div class="sidebar-item" id="nav-builder" onclick="switchCell('builder')">
+    <i class="ph ph-film-strip"></i> Production Builder
+</div>
+            
+            <div class="sidebar-item" id="nav-queue" onclick="switchCell('queue')">
+                <i class="ph ph-cards"></i> Work Queue
+            </div>
+            
+            <div class="sidebar-item" id="nav-canvas" onclick="switchCell('canvas')">
+                <i class="ph ph-scroll"></i> Final Script Canvas
+            </div>
+            
+            <div style="flex-grow: 1;"></div>
+            
+            <a href="/gateway.html" class="sidebar-item" style="border: none; color: var(--text-muted); text-decoration: none;">
+                <i class="ph ph-arrow-u-up-left"></i> Return to Gateway
+            </a>
+        </nav>
+
+        <main class="main-content">
+            
+            <div class="cell-content active" id="cell-analyst">
+                <div class="inner-cell" style="border-color: rgba(178, 0, 255, 0.2);">
+                    <div class="cell-header" style="color: var(--accent-violet); display: flex; justify-content: space-between; align-items: center;">
+                        <span>Hollywood Script Doctor AI</span>
+                        <button id="voice-toggle" onclick="toggleVoice()" style="background: none; border: none; color: white; cursor: pointer; font-size: 1.4rem;" title="Toggle Voice"><i class="ph ph-speaker-high"></i></button>
+                    </div>
+                    
+                    <div class="chat-container">
+                        <div class="chat-history" id="analyst-history">
+                            <div class="chat-bubble ai">
+                                <strong>System:</strong> I am your co-writer. Pitch me your story, scene, or character concept. I will analyze the logic, check for plot holes, and cross-reference TMDB to ensure it avoids clichés.
+                            </div>
+                        </div>
+                        
+                        <div class="chat-input-area">
+                            <input type="text" id="analyst-input" class="dark-input" placeholder="Describe your scene or idea..." onkeypress="if(event.key==='Enter') sendToAnalyst()">
+                            <button class="cine-btn primary" onclick="sendToAnalyst()"><i class="ph ph-paper-plane-right"></i> Consult</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cell-content" id="cell-builder">
+                <div class="inner-cell" style="overflow-y: auto;">
+                    
+                    <div class="cell-header" style="display: flex; align-items: center; gap: 10px;">
+                        <i class="ph ph-clapperboard" style="font-size: 1.6rem; color: var(--accent-violet);"></i>
+                        <span>Scene Constructor</span>
+                    </div>
+                    
+                    <div class="builder-grid">
+                        <div class="builder-section-title">Scene Metadata</div>
+                        <select id="pb-setting" class="dark-select"><option value="INT.">INT. (Inside)</option><option value="EXT.">EXT. (Outside)</option></select>
+                        <input type="text" id="pb-location" class="dark-input" placeholder="Location (e.g., ABANDONED WAREHOUSE)">
+                        <select id="pb-time" class="dark-select"><option value="DAY">DAY</option><option value="NIGHT">NIGHT</option><option value="DUSK">DUSK</option></select>
+                        
+                        <div class="builder-section-title">Characters Involved</div>
+                        <input type="text" id="pb-char-name" class="dark-input" placeholder="Character Name">
+                        <input type="text" id="pb-char-desc" class="dark-input" placeholder="Age & Description" style="grid-column: span 2;">
+                        
+                        <div class="builder-section-title">Action & Dialogue</div>
+                    </div>
+                    
+                    <textarea id="pb-action" class="dark-textarea" style="flex-grow: 1; min-height: 200px; margin-bottom: 20px;" placeholder="Write the scene action and dialogue here..."></textarea>
+                    
+                    <div style="display: flex; justify-content: flex-end; gap: 15px;">
+                        <button class="cine-btn" onclick="document.querySelectorAll('#cell-builder input, #cell-builder textarea').forEach(el => el.value='')"><i class="ph ph-trash"></i> Clear Form</button>
+                        <button class="cine-btn primary" onclick="saveScene()"><i class="ph ph-floppy-disk"></i> Save to Work Queue</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cell-content" id="cell-queue">
+                <div class="inner-cell" style="overflow-y: auto;">
+                    <div class="cell-header" style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>Scene Staging Area</span>
+                        <button class="cine-btn" style="padding: 5px 15px; font-size: 0.8rem;" onclick="loadQueue()"><i class="ph ph-arrows-clockwise"></i> Refresh Queue</button>
+                    </div>
+                    
+                    <div id="queue-container">
+                        <p style="text-align: center; color: var(--text-muted); margin-top: 50px;">
+                            No scenes compiled yet.<br>Use the Production Builder to draft and save your first block.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cell-content" id="cell-canvas">
+                <div class="inner-cell" style="padding: 0; background: rgba(0,0,0,0.8);">
+                    <div class="cell-header" style="margin: 20px; padding-bottom: 0; border: none;">Master Screenplay</div>
+                    <textarea class="dark-textarea" style="flex-grow: 1; border: none; border-radius: 0; background: transparent; font-family: 'Courier New', Courier, monospace; font-size: 1.1rem; padding: 40px; resize: none;" placeholder="[Copy and paste your compiled scenes here to format the final draft...]"></textarea>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <div class="modal-overlay" id="modal-profile">
+        <div class="modal-box">
+            <button class="close-modal" onclick="closeModal('modal-profile')"><i class="ph ph-x"></i></button>
+            <h2 class="modal-title">Ash Creations Company</h2>
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="{{ url_for('static', filename='ash.png') }}" alt="Ash Creations" style="width: 150px; filter: invert(1); mix-blend-mode: screen;">
+            </div>
+            <p style="line-height: 1.8;"><strong>Ash Creations Company</strong> is a premier software and design architectural firm. Founded on the principle that logic and creativity are not mutually exclusive, we build enterprise-grade applications that feel like cinematic experiences.</p>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Lead Architect: Director Devil<br>Version: CineGEN OS 1.0.0</p>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-appearance">
+        <div class="modal-box">
+            <button class="close-modal" onclick="closeModal('modal-appearance')"><i class="ph ph-x"></i></button>
+            <h2 class="modal-title">System Appearance</h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">Select your preferred visual matrix. The system will remember your choice.</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <button class="cine-btn primary" onclick="changeTheme('theme-default')">🌌 Dark AMOLED</button>
+                <button class="cine-btn" style="border-color: #00ff41; color: #00ff41;" onclick="changeTheme('theme-matrix')">📟 The Matrix</button>
+                <button class="cine-btn" style="background: #f8fafc; color: #0f172a;" onclick="changeTheme('theme-light')">☀️ Light Studio</button>
+                <button class="cine-btn" style="border-color: white; color: white;" onclick="changeTheme('theme-contrast')">🔳 High Contrast</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-about">
+        <div class="modal-box">
+            <button class="close-modal" onclick="closeModal('modal-about')"><i class="ph ph-x"></i></button>
+            <h2 class="modal-title">About CineGEN Engine</h2>
+            <p style="line-height: 1.8;"><strong>CineGEN</strong> is a dual-engine production suite.</p>
+            <ul style="line-height: 1.8; color: var(--text-muted);">
+                <li><strong>The Workspace</strong> integrates deeply with TMDB, Wikipedia, and Apify to map cinematic lore. It features an onboard Pandas-driven Data Manager and a simulated Python/MySQL execution terminal.</li>
+                <li><strong>The Script Studio</strong> harnesses an OpenRouter AI integration configured specifically as a Hollywood Script Doctor, complete with a modular scene queueing system.</li>
+                <li><strong>Voice Intelligence:</strong> Includes a highly tuned text-to-speech matrix running an Angelic/Husky neural profile.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

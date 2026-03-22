@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineGEN | Workspace</title>
+    
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    </head>
+<body>
+    <div class="film-grain"></div>
+
+    <header class="global-header">
+        <div class="header-branding">
+            <div class="header-title">CINEGEN</div>
+            <div class="header-tagline">By Ash Creations Company</div>
+        </div>
+        
+        <div class="header-nav-group">
+            <button class="nav-icon-btn" onclick="window.history.back()" title="Go Back"><i class="ph ph-arrow-left"></i></button>
+            <a href="/" class="nav-icon-btn" title="Home"><i class="ph ph-house"></i></a>
+        </div>
+
+        <div class="menu-toggle" title="Settings & Profile" onclick="toggleProfileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <div class="profile-dropdown" id="profileMenu">
+            <a href="#" class="dropdown-item" onclick="openModal('modal-profile')"><i class="ph ph-user"></i> Profile Info</a>
+            <a href="#" class="dropdown-item" onclick="openModal('modal-appearance')"><i class="ph ph-palette"></i> Appearance</a>
+            <a href="#" class="dropdown-item" onclick="openModal('modal-about')"><i class="ph ph-info"></i> About CineGEN</a>
+            <div style="height: 1px; background: rgba(255,255,255,0.1); margin: 5px 0;"></div>
+            <a href="#" class="dropdown-item" style="color: #ff4444;"><i class="ph ph-sign-out"></i> Sign Out</a>
+        </div>
+    </header>
+
+    <div class="app-container">
+        
+        <nav class="sidebar">
+            <div class="sidebar-item active" id="nav-dashboard" onclick="switchCell('dashboard')">
+                <i class="ph ph-chart-bar"></i> Dashboard
+            </div>
+            <div class="sidebar-item" id="nav-genie" onclick="switchCell('genie')">
+                <i class="ph ph-robot"></i> Cine Genie Chat
+            </div>
+            <div class="sidebar-item" id="nav-files" onclick="switchCell('files')">
+                <i class="ph ph-folder-open"></i> File Manager
+            </div>
+            <div class="sidebar-item" id="nav-ide" onclick="switchCell('ide')">
+                <i class="ph ph-terminal-window"></i> Programming IDE
+            </div>
+            <div class="sidebar-item" id="nav-explorer" onclick="switchCell('explorer')">
+                <i class="ph ph-film-strip"></i> Movie Explorer
+            </div>
+            
+            <div style="flex-grow: 1;"></div>
+            
+            <a href="gateway.html" class="sidebar-item" style="border: none; color: var(--text-muted); text-decoration: none;">
+                <i class="ph ph-arrow-u-up-left"></i> Return to Gateway
+            </a>
+        </nav>
+
+        <main class="main-content">
+            
+            <div class="cell-content active" id="cell-dashboard">
+                <div class="inner-cell">
+                    <div class="cell-header">PowerBI Dashboard Analytics</div>
+                    <p style="color: var(--text-muted);">Visual data representations and PowerBI embedded graphs will be rendered here.</p>
+                </div>
+            </div>
+
+            <div class="cell-content" id="cell-genie">
+                <div class="inner-cell" style="border-color: rgba(0, 229, 255, 0.2);">
+                    <div class="cell-header" style="color: var(--accent-blue); display: flex; justify-content: space-between; align-items: center;">
+                        <span>Cine Genie | Cinematic Oracle</span>
+                        <button id="voice-toggle" onclick="toggleVoice()" style="background: none; border: none; color: white; cursor: pointer; font-size: 1.4rem;" title="Toggle Voice"><i class="ph ph-speaker-high"></i></button>
+                    </div>
+                    
+                    <div class="chat-container">
+                        <div class="chat-history" id="genie-history">
+                            <div class="chat-bubble ai" style="background: rgba(0, 229, 255, 0.1); border-color: rgba(0, 229, 255, 0.2);">
+                                <strong>Cine Genie:</strong> Hello, Director. Ask me for movie recommendations, box office trivia, or to delve into cinematic history. I am ready.
+                            </div>
+                        </div>
+                        
+                        <div class="chat-input-area">
+                            <input type="text" id="genie-input" class="dark-input" placeholder="Ask about movies, genres, or actors..." onkeypress="if(event.key==='Enter') sendToGenie()">
+                            <button class="cine-btn primary" style="background: rgba(0, 229, 255, 0.1); border-color: var(--accent-blue);" onclick="sendToGenie()"><i class="ph ph-paper-plane-right"></i> Ask Genie</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cell-content" id="cell-files">
+                <div class="inner-cell" style="display: flex; flex-direction: column;">
+                    <div class="cell-header">Data & Excel Manager</div>
+                    
+                    <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 10px;">
+                        <input type="file" id="dataset-upload" accept=".csv, .xlsx, .xls" class="dark-input" style="max-width: 400px; padding: 10px 20px;">
+                        <button class="cine-btn primary" onclick="uploadDataset()"><i class="ph ph-upload-simple"></i> Upload & Parse</button>
+                        <span id="upload-status" style="color: var(--accent-violet); font-size: 0.9rem; letter-spacing: 1px; margin-left: 10px;"></span>
+                    </div>
+                    
+                    <div class="table-container" id="data-table-container">
+                        <p style="text-align: center; color: var(--text-muted); margin-top: 100px; font-size: 1.1rem; letter-spacing: 1px;">
+                            No dataset active.<br>Upload a CSV or Excel file to visualize the data matrix.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cell-content" id="cell-ide">
+                <div class="inner-cell" style="padding: 0; background: transparent; border: none; backdrop-filter: none;">
+                    <div class="cell-header" style="padding: 20px; background: rgba(0,0,0,0.5); margin: 0; border-radius: 16px 16px 0 0;">Python & MySQL Environment</div>
+                    
+                    <div class="ide-wrapper" style="border-radius: 0 0 16px 16px; border-top: none;">
+                        <div class="ide-header-bar">
+                            <select id="ide-language" class="dark-select" style="width: auto; padding: 5px 10px; border-color: rgba(255,255,255,0.2); box-shadow: none;">
+                                <option value="python">Python 3.10 (Pandas)</option>
+                                <option value="sql">MySQL (Data Manager Linked)</option>
+                            </select>
+                            <button class="cine-btn primary" style="padding: 5px 15px; font-size: 0.8rem;" onclick="runCode()"><i class="ph ph-play"></i> RUN SCRIPT</button>
+                        </div>
+                        
+                        <textarea id="ide-code" class="code-textarea">import pandas as pd
+import json
+
+# CineGEN Data Environment
+# Your uploaded dataset is securely mounted in memory.
+
+def analyze_matrix():
+    print("Initiating deep data scan...")
+    # Write your data manipulation logic here
+    
+analyze_matrix()</textarea>
+                        
+                        <div id="ide-terminal" class="terminal-box">> System online. Awaiting execution commands...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cell-content" id="cell-explorer">
+                <div class="inner-cell" style="overflow-y: auto;">
+                    <div class="cell-header">Deep Lore Movie Explorer</div>
+                    
+                    <div style="display: flex; gap: 15px; margin-bottom: 30px;">
+                        <input type="text" id="explorer-input" class="dark-input" placeholder="Search a movie title (e.g., The Matrix)..." onkeypress="if(event.key==='Enter') searchMovie()">
+                        <button class="cine-btn primary" onclick="searchMovie()"><i class="ph ph-magnifying-glass"></i> Scan Databases</button>
+                    </div>
+
+                    <div id="explorer-loading" style="display: none; color: var(--accent-blue); text-align: center; margin-top: 50px; font-size: 1.2rem; animation: pulse 1.5s infinite;">
+                        Scanning global databases...
+                    </div>
+
+                    <div id="explorer-results" style="display: none; grid-template-columns: 350px 1fr; gap: 40px; margin-top: 20px;">
+                        <div>
+                            <img id="res-poster" src="" alt="Movie Poster" style="width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1);">
+                        </div>
+                        <div>
+                            <h2 id="res-title" style="margin-top: 0; font-size: 2.5rem; color: var(--text-main); letter-spacing: 2px;"></h2>
+                            <div style="color: var(--accent-blue); font-size: 1.2rem; margin-bottom: 25px; letter-spacing: 1px;">
+                                <i class="ph ph-star" style="color: gold;"></i> <span id="res-rating"></span>/10 &nbsp;|&nbsp; <i class="ph ph-calendar-blank"></i> <span id="res-date"></span>
+                            </div>
+                            
+                            <h3 style="color: var(--accent-violet); border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 2px;">TMDB Official Synopsis</h3>
+                            <p id="res-plot" style="color: var(--text-muted); line-height: 1.8; font-size: 1.05rem;"></p>
+                            
+                            <h3 style="color: var(--accent-violet); border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px; margin-top: 40px; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 2px;">Wikipedia Deep Lore</h3>
+                            <p id="res-lore" style="color: var(--text-muted); line-height: 1.8; font-size: 1.05rem;"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <div class="modal-overlay" id="modal-profile">
+        <div class="modal-box">
+            <button class="close-modal" onclick="closeModal('modal-profile')"><i class="ph ph-x"></i></button>
+            <h2 class="modal-title">Ash Creations Company</h2>
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="{{ url_for('static', filename='ash.png') }}" alt="Ash Creations" style="width: 150px; filter: invert(1); mix-blend-mode: screen;">
+            </div>
+            <p style="line-height: 1.8;"><strong>Ash Creations Company</strong> is a premier software and design architectural firm. Founded on the principle that logic and creativity are not mutually exclusive, we build enterprise-grade applications that feel like cinematic experiences.</p>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Lead Architect: Director Devil<br>Version: CineGEN OS 1.0.0</p>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-appearance">
+        <div class="modal-box">
+            <button class="close-modal" onclick="closeModal('modal-appearance')"><i class="ph ph-x"></i></button>
+            <h2 class="modal-title">System Appearance</h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">Select your preferred visual matrix. The system will remember your choice.</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <button class="cine-btn primary" onclick="changeTheme('theme-default')">🌌 Dark AMOLED</button>
+                <button class="cine-btn" style="border-color: #00ff41; color: #00ff41;" onclick="changeTheme('theme-matrix')">📟 The Matrix</button>
+                <button class="cine-btn" style="background: #f8fafc; color: #0f172a;" onclick="changeTheme('theme-light')">☀️ Light Studio</button>
+                <button class="cine-btn" style="border-color: white; color: white;" onclick="changeTheme('theme-contrast')">🔳 High Contrast</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-about">
+        <div class="modal-box">
+            <button class="close-modal" onclick="closeModal('modal-about')"><i class="ph ph-x"></i></button>
+            <h2 class="modal-title">About CineGEN Engine</h2>
+            <p style="line-height: 1.8;"><strong>CineGEN</strong> is a dual-engine production suite.</p>
+            <ul style="line-height: 1.8; color: var(--text-muted);">
+                <li><strong>The Workspace</strong> integrates deeply with TMDB, Wikipedia, and Apify to map cinematic lore. It features an onboard Pandas-driven Data Manager and a simulated Python/MySQL execution terminal.</li>
+                <li><strong>The Script Studio</strong> harnesses an OpenRouter AI integration configured specifically as a Hollywood Script Doctor, complete with a modular scene queueing system.</li>
+                <li><strong>Voice Intelligence:</strong> Includes a highly tuned text-to-speech matrix running an Angelic/Husky neural profile.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+    </body>
+</html>

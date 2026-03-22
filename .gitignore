@@ -1,0 +1,4 @@
+# Ash Creations Security Rules
+.env
+__pycache__/
+venv/
