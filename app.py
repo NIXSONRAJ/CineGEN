@@ -8,6 +8,7 @@ import os
 import re
 import requests
 import pandas as pd
+import sqlite3
 from flask import Flask, render_template, jsonify, request
 from dotenv import load_dotenv
 
@@ -287,6 +288,38 @@ def manage_scenes():
         return jsonify({"message": "Scene secured in the Work Queue.", "scenes": saved_scenes})
         
     return jsonify({"scenes": saved_scenes})
+
+
+@app.route('/api/sql-matrix')
+def sql_matrix():
+    """Live API endpoint that queries the SQL database and returns JSON to the web."""
+    try:
+        # Connect to the permanent database Render pulled from GitHub
+        conn = sqlite3.connect('cinegen.db')
+        
+        # This makes the database return dictionary objects instead of raw tuples
+        conn.row_factory = sqlite3.Row 
+        cursor = conn.cursor()
+        
+        # The Master Query
+        cursor.execute("""
+            SELECT Title, Director, Box_Office_USD, ROI_Percentage 
+            FROM movies 
+            ORDER BY ROI_Percentage DESC 
+            LIMIT 5;
+        """)
+        
+        # Fetch the data and close the connection
+        rows = cursor.fetchall()
+        conn.close()
+        
+        # Convert the SQL rows into a clean JSON list for the web
+        data = [dict(row) for row in rows]
+        
+        return {"status": "success", "data": data}
+
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
 
 # ------------------------------------------------------------------------------
 # 🚀 SERVER IGNITION
