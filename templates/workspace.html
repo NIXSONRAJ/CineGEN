@@ -218,7 +218,80 @@ analyze_matrix()</textarea>
             </ul>
         </div>
     </div>
+    <div class="cell-content active" id="cell-database" style="margin-top: 20px;">
+                <div class="inner-cell" style="padding: 20px; border-color: var(--accent-violet);">
+                    <div class="cell-header" style="border-bottom: 1px solid rgba(178, 0, 255, 0.3); margin-bottom: 15px; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <i class="ph ph-database" style="font-size: 1.6rem; color: var(--accent-violet);"></i>
+                            <span style="font-family: 'Cinzel', serif; font-size: 1.2rem; color: var(--text-main);">Live SQL Matrix</span>
+                        </div>
+                        <button onclick="fetchSQLData()" style="background: transparent; border: 1px solid var(--accent-violet); color: var(--accent-violet); padding: 5px 15px; border-radius: 4px; cursor: pointer; font-family: 'Inter', sans-serif; transition: 0.3s;">
+                            <i class="ph ph-arrows-clockwise"></i> Run Query
+                        </button>
+                    </div>
+                    
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; text-align: left; border-collapse: collapse; font-family: 'Inter', sans-serif;">
+                            <thead>
+                                <tr style="color: var(--text-muted); border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <th style="padding: 10px;">Asset Title</th>
+                                    <th style="padding: 10px;">Lead Architect (Director)</th>
+                                    <th style="padding: 10px;">Gross Revenue</th>
+                                    <th style="padding: 10px;">Calculated ROI</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sql-data-body">
+                                <tr>
+                                    <td colspan="4" style="text-align: center; padding: 20px; color: var(--text-muted);">
+                                        <i class="ph ph-spinner ph-spin" style="font-size: 1.5rem; color: var(--accent-violet);"></i> Awaiting SQL Uplink...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
     <script src="{{ url_for('static', filename='app.js') }}"></script>
+    <script>
+        async function fetchSQLData() {
+            const tableBody = document.getElementById('sql-data-body');
+            tableBody.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 20px; color: var(--text-muted);"><i class="ph ph-spinner ph-spin"></i> Executing Query...</td></tr>`;
+
+            try {
+                // Reach out to your Flask API
+                const response = await fetch('/api/sql-matrix');
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    tableBody.innerHTML = ''; // Clear the loading spinner
+                    
+                    // Loop through the database rows and create HTML for each one
+                    result.data.forEach(movie => {
+                        // Format the money with commas
+                        let formattedMoney = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(movie.Box_Office_USD);
+                        
+                        let row = `
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); transition: 0.2s;">
+                                <td style="padding: 12px; color: var(--text-main); font-weight: 500;">${movie.Title}</td>
+                                <td style="padding: 12px; color: var(--text-muted);">${movie.Director}</td>
+                                <td style="padding: 12px; color: var(--accent-blue); font-family: monospace; font-size: 1.1rem;">${formattedMoney}</td>
+                                <td style="padding: 12px; color: #00ff41; font-family: monospace; font-size: 1.1rem;">+${movie.ROI_Percentage}%</td>
+                            </tr>
+                        `;
+                        tableBody.innerHTML += row;
+                    });
+                } else {
+                    tableBody.innerHTML = `<tr><td colspan="4" style="color: #ff4444; padding: 15px;">Error: ${result.message}</td></tr>`;
+                }
+            } catch (error) {
+                tableBody.innerHTML = `<tr><td colspan="4" style="color: #ff4444; padding: 15px;">Connection Failed. Check Server Uplink.</td></tr>`;
+                console.error("SQL Fetch Error:", error);
+            }
+        }
+
+        // Automatically fetch data when the page loads
+        document.addEventListener('DOMContentLoaded', fetchSQLData);
+    </script>
     </body>
 </html>
