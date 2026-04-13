@@ -38,3 +38,13 @@ The OS features a CSS-variable architecture allowing instantaneous environment h
 * **Deployment:** Render (Cloud Hosting)
 
 ---
+
+<img width="1806" height="937" alt="Screenshot 2026-04-13 163939" src="https://github.com/user-attachments/assets/d06ad52d-49be-4885-b2d9-bd7f2316022f" />
+<img width="1766" height="858" alt="Screenshot 2026-04-13 164153" src="https://github.com/user-attachments/assets/a815fc20-6be9-4567-ac86-635c7d7c9ca7" />
+<img width="1797" height="892" alt="Screenshot 2026-04-13 164411" src="https://github.com/user-attachments/assets/39a41072-70ea-46a5-b810-6d510d190afe" />
+<img width="1821" height="900" alt="Screenshot 2026-04-13 164528" src="https://github.com/user-attachments/assets/408048e4-3dcf-4c99-b4d8-4a30861015af" />
+<img width="1790" height="902" alt="Screenshot 2026-04-13 164742" src="https://github.com/user-attachments/assets/65784980-1f22-4515-8995-5570ae26027a" />
+<img width="1456" height="743" alt="Screenshot 2026-04-13 165920" src="https://github.com/user-attachments/assets/22d34dd7-dd22-44ae-9c67-00a655684bcd" />
+
+
+---
